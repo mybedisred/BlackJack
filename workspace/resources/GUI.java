@@ -1,3 +1,8 @@
+/*
+ * Author: Spencer Gilcrest
+ * Date: 10/22/25
+ * This creates the GUI for our black jack game
+ */
 package resources;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,17 +16,20 @@ import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Stack;
+
 
 
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
 
 	Solitaire game;
-   public GUI(Solitaire game){
-	   this.game= game;
+   	public GUI(Solitaire game){
+		this.game= game;
         //Create and set up the window.
-       setTitle("Solitaire");
-       setSize(900,700);
+       setTitle("Blackjack");
+       setSize(900,580);
        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   
        
        // this supplies the background
        try {
@@ -32,18 +40,120 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
        }catch(IOException e) {
     	   e.printStackTrace();
        }
-       
-       /*******
-        * This is just a test to make sure images are being read correctly on your machine. Please replace
-        * once you have confirmed that the card shows up properly. The code below should allow you to play the solitare
-        * game once it's fully created.
-        */
-       Card card = new Card(2, Card.Suit.Diamonds);
-       System.out.println(card);
-       this.add(card);    
 
-        this.setVisible(true);
+	   GridBagLayout layout = new GridBagLayout();
+	   setLayout(layout);
+	   GridBagConstraints c = new GridBagConstraints();
+	   c.fill = GridBagConstraints.BOTH;
+
+	   //top left
+	   JPanel dealerArea = new JPanel(new BorderLayout());
+	   dealerArea.setOpaque(false);
+	   dealerArea.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+	   c.gridx = 0;
+	   c.gridy = 0;
+	   c.gridwidth = 2;
+	   c.weightx = 0.7;
+	   c.weighty = 0.5;
+	   add(dealerArea, c);
+
+	   //top right
+	   JPanel deckArea = new JPanel(new BorderLayout());
+	   deckArea.setOpaque(false);
+	   deckArea.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+	   c.gridx = 2;
+	   c.gridy = 0;
+	   c.gridwidth = 1;
+	   c.weightx = 0.3;
+	   c.weighty = 0.5;
+	   add(deckArea, c);
+
+	   //bottom left
+	   JPanel bankrollArea = new JPanel(new BorderLayout());
+	   bankrollArea.setOpaque(false);
+	   bankrollArea.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+	   c.gridx = 0;
+	   c.gridy = 1;
+	   c.gridwidth = 1;
+	   c.weightx = 0.2;
+	   c.weighty = 0.5;
+	   add(bankrollArea, c);
+
+	   //bottom middle
+	   JPanel playerArea = new JPanel(new BorderLayout());
+	   playerArea.setOpaque(false);
+	   playerArea.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+	   c.gridx = 1;
+	   c.gridy = 1;
+	   c.gridwidth = 1;
+	   c.weightx = 0.5;
+	   c.weighty = 0.5;
+	   add(playerArea, c);
+
+	   //bottom right
+	   JPanel optionArea = new JPanel(new BorderLayout());
+	   optionArea.setOpaque(false);
+	   optionArea.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 3));
+	   c.gridx = 2;
+	   c.gridy = 1;
+	   c.gridwidth = 1;
+	   c.weightx = 0.3;
+	   c.weighty = 0.5;
+	   add(optionArea, c);
+
+	   
+	   Stack<Card> test = new Stack<>();
+	   test.push(new Card(1, Card.Suit.Spades));
+	   test.push(new Card(12, Card.Suit.Hearts));
+	   test.push(new Card(5, Card.Suit.Clubs));
+	   test.push(new Card(10, Card.Suit.Diamonds));
+	   
+	   
+	   
+	   JLayeredPane pile = drawPile(test, 20);
+	   dealerArea.add(pile, BorderLayout.CENTER);
+	   
+	   
+	   /* 
+	   Stack<Card> deck = new Stack<>();
+	   for (Card.Suit suit : Card.Suit.values()){
+			for (int value = 1; value <= 13; value++){
+				Card card = new Card(value, suit);
+				card.hide();
+				deck.push(card);
+			}
+	   }
+
+	   JLayeredPane deckPane = drawPile(deck,1);
+	   deckArea.add(deckPane, BorderLayout.CENTER);
+	   */
+
+	   deckArea.revalidate();
+	   deckArea.repaint();
+	   
+
+
+    	this.setVisible(true);
+		
     }
+
+	public JLayeredPane drawPile(Stack<Card> cardStack, int overlap){
+			Object[] cards = cardStack.toArray();
+			JLayeredPane pile = new JLayeredPane();
+			int cardWidth = 100;
+			int cardHeight = 145;
+			
+			for (int i = 0; i < cards.length; i++){
+				Card card = (Card) cards[i];
+				card.setBounds(overlap * i, overlap * i, cardWidth, cardHeight);
+				pile.add(card, Integer.valueOf(i));
+			}
+
+			pile.setOpaque(false);
+			return pile;
+	   }
+
+	   
 
 
 	@Override

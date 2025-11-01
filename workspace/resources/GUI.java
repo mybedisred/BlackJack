@@ -22,8 +22,8 @@ import java.util.Stack;
 
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
 
-	Solitaire game;
-   	public GUI(Solitaire game){
+	Blackjack game;
+   	public GUI(Blackjack game){
 		this.game= game;
         //Create and set up the window.
        setTitle("Blackjack");
@@ -66,6 +66,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   c.gridwidth = 1;
 	   c.weightx = 0.3;
 	   c.weighty = 0.5;
+		JLayeredPane deckPane = drawPile(game.makeShuffledDeck(), 1);
+		deckArea.add(deckPane, BorderLayout.CENTER);
 	   add(deckArea, c);
 
 	   //bottom left
@@ -79,6 +81,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   c.weighty = 0.5;
 	   add(bankrollArea, c);
 
+
+
 	   //bottom middle
 	   JPanel playerArea = new JPanel(new BorderLayout());
 	   playerArea.setOpaque(false);
@@ -91,7 +95,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   add(playerArea, c);
 
 	   //bottom right
-	   JPanel optionArea = new JPanel(new BorderLayout());
+	   JPanel optionArea = new JPanel(new GridLayout(3, 1));
 	   optionArea.setOpaque(false);
 	   optionArea.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 3));
 	   c.gridx = 2;
@@ -99,7 +103,17 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   c.gridwidth = 1;
 	   c.weightx = 0.3;
 	   c.weighty = 0.5;
-	   add(optionArea, c);
+	   
+		//Buttons
+		JButton hitOption = new JButton("HIT");
+	   	optionArea.add(hitOption, BorderLayout.NORTH);
+	   
+	   	JButton standOption = new JButton("STAND");
+	   	optionArea.add(standOption, BorderLayout.CENTER);
+	   
+	   	JButton doubleOption = new JButton("DOUBLE");
+	   	optionArea.add(doubleOption, BorderLayout.SOUTH);
+	   	add(optionArea, c);
 
 	   
 	   Stack<Card> test = new Stack<>();
@@ -128,10 +142,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   deckArea.add(deckPane, BorderLayout.CENTER);
 	   */
 
-	   deckArea.revalidate();
-	   deckArea.repaint();
-	   
+		//deckArea.revalidate();
+		//deckArea.repaint();
 
+		//Current Pot
+		JLabel pot = new JLabel(Integer.toString(game.getPotAmount()));
+		bankrollArea.add(pot);
 
     	this.setVisible(true);
 		
@@ -145,7 +161,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 			
 			for (int i = 0; i < cards.length; i++){
 				Card card = (Card) cards[i];
-				card.setBounds(overlap * i, overlap * i, cardWidth, cardHeight);
+				card.setBounds((overlap * i)/2, (overlap * i)/3, cardWidth, cardHeight);
 				pile.add(card, Integer.valueOf(i));
 			}
 
@@ -158,7 +174,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		//TODO Auto-generated method stub
 		
 	}
 

@@ -83,6 +83,38 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.weighty = 0.5;
 	   	add(bankrollArea, c);
 
+	   	JLabel potDisplay = new JLabel(Integer.toString(game.getPotAmount()));
+
+		//Style
+	   	potDisplay.setOpaque(true);
+		potDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
+	   	potDisplay.setBackground(new Color(50, 204, 0));
+		potDisplay.setForeground(Color.WHITE);
+		potDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));
+
+	   	
+		//Positioning
+		potDisplay.setHorizontalAlignment(JLabel.CENTER);
+		potDisplay.setVerticalAlignment(JLabel.CENTER);
+
+	   	bankrollArea.add(potDisplay, BorderLayout.NORTH);
+
+	   	JLabel playerBankDisplay = new JLabel(Integer.toString(game.getPlayerBankroll()));
+
+		//Style
+	   	playerBankDisplay.setOpaque(true);
+		playerBankDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
+	   	playerBankDisplay.setBackground(new Color(50, 204, 0));
+		playerBankDisplay.setForeground(Color.WHITE);
+		playerBankDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));
+
+	   	
+		//Positioning
+		playerBankDisplay.setHorizontalAlignment(JLabel.CENTER);
+		playerBankDisplay.setVerticalAlignment(JLabel.CENTER);
+
+	   	bankrollArea.add(playerBankDisplay, BorderLayout.SOUTH);
+
 	   	//bottom middle
 	   	JPanel playerArea = new JPanel(new BorderLayout());
 	   	playerArea.setOpaque(false);
@@ -103,6 +135,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.gridwidth = 1;
 	   	c.weightx = 0.3;
 	   	c.weighty = 0.5;
+	   
 	   	add(optionArea, c);
 
 		//Buttons

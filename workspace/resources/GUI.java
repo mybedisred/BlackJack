@@ -5,6 +5,7 @@
  */
 package resources;
 import javax.imageio.ImageIO;
+import javax.print.attribute.AttributeSetUtilities;
 import javax.swing.*;
 
 import java.awt.*;
@@ -24,133 +25,141 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	Blackjack game;
    	public GUI(Blackjack game){
-		this.game= game;
-        //Create and set up the window.
-       setTitle("Blackjack");
-       setSize(900,580);
-       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	   
-       
-       // this supplies the background
-       try {
-		System.out.println(getClass().toString());
-		Image blackImg = ImageIO.read(getClass().getResource("background.jpg"));
-		setContentPane(new ImagePanel(blackImg));
+		this.game = game;
 
-       }catch(IOException e) {
-    	   e.printStackTrace();
-       }
+    	//Create and set up the window.
+       	setTitle("Blackjack");
+       	setSize(900,580);
+       	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	   GridBagLayout layout = new GridBagLayout();
-	   setLayout(layout);
-	   GridBagConstraints c = new GridBagConstraints();
-	   c.fill = GridBagConstraints.BOTH;
 
-	   //top left
-	   JPanel dealerArea = new JPanel(new BorderLayout());
-	   dealerArea.setOpaque(false);
-	   dealerArea.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
-	   c.gridx = 0;
-	   c.gridy = 0;
-	   c.gridwidth = 2;
-	   c.weightx = 0.7;
-	   c.weighty = 0.5;
-	   add(dealerArea, c);
+       	// this supplies the background
+       	try {
+			System.out.println(getClass().toString());
+			Image backImg = ImageIO.read(getClass().getResource("background.jpg"));
+			setContentPane(new ImagePanel(backImg));
 
-	   //top right
-	   JPanel deckArea = new JPanel(new BorderLayout());
-	   deckArea.setOpaque(false);
-	   deckArea.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-	   c.gridx = 2;
-	   c.gridy = 0;
-	   c.gridwidth = 1;
-	   c.weightx = 0.3;
-	   c.weighty = 0.5;
+       	}catch(IOException e) {
+    	   	e.printStackTrace();
+       	}
+
+	   	GridBagLayout layout = new GridBagLayout();
+	   	GridBagConstraints c = new GridBagConstraints();
+	   	c.fill = GridBagConstraints.BOTH;
+	   	setLayout(layout);
+
+	   	//top left
+	   	JPanel dealerArea = new JPanel(new BorderLayout());
+	   	dealerArea.setOpaque(false);
+	   	dealerArea.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+	   	c.gridx = 0;
+	   	c.gridy = 0;
+	   	c.gridwidth = 2;
+	   	c.weightx = 0.7;
+	   	c.weighty = 0.5;
+	   	add(dealerArea, c);
+
+	   	//top right
+	   	JPanel deckArea = new JPanel(new BorderLayout());
+	   	deckArea.setOpaque(false);
+	   	deckArea.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+	   	c.gridx = 2;
+	   	c.gridy = 0;
+	   	c.gridwidth = 1;
+	   	c.weightx = 0.3;
+	   	c.weighty = 0.5;
 		JLayeredPane deckPane = drawPile(game.makeShuffledDeck(), 1);
 		deckArea.add(deckPane, BorderLayout.CENTER);
-	   add(deckArea, c);
+	   	add(deckArea, c);
 
-	   //bottom left
-	   JPanel bankrollArea = new JPanel(new BorderLayout());
-	   bankrollArea.setOpaque(false);
-	   bankrollArea.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
-	   c.gridx = 0;
-	   c.gridy = 1;
-	   c.gridwidth = 1;
-	   c.weightx = 0.2;
-	   c.weighty = 0.5;
-	   add(bankrollArea, c);
+	   	//bottom left
+	   	JPanel bankrollArea = new JPanel(new BorderLayout());
+	   	bankrollArea.setOpaque(false);
+	   	bankrollArea.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+	   	c.gridx = 0;
+	   	c.gridy = 1;
+	   	c.gridwidth = 1;
+	   	c.weightx = 0.2;
+	   	c.weighty = 0.5;
+	   	add(bankrollArea, c);
 
+	   	JLabel potDisplay = new JLabel(Integer.toString(game.getPotAmount()));
 
+		//Style
+	   	potDisplay.setOpaque(true);
+		potDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
+	   	potDisplay.setBackground(new Color(50, 204, 0));
+		potDisplay.setForeground(Color.WHITE);
+		potDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));
 
-	   //bottom middle
-	   JPanel playerArea = new JPanel(new BorderLayout());
-	   playerArea.setOpaque(false);
-	   playerArea.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-	   c.gridx = 1;
-	   c.gridy = 1;
-	   c.gridwidth = 1;
-	   c.weightx = 0.5;
-	   c.weighty = 0.5;
-	   add(playerArea, c);
+	   	
+		//Positioning
+		potDisplay.setHorizontalAlignment(JLabel.CENTER);
+		potDisplay.setVerticalAlignment(JLabel.CENTER);
 
-	   //bottom right
-	   JPanel optionArea = new JPanel(new GridLayout(3, 1));
-	   optionArea.setOpaque(false);
-	   optionArea.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 3));
-	   c.gridx = 2;
-	   c.gridy = 1;
-	   c.gridwidth = 1;
-	   c.weightx = 0.3;
-	   c.weighty = 0.5;
+	   	bankrollArea.add(potDisplay, BorderLayout.NORTH);
+
+	   	JLabel playerBankDisplay = new JLabel(Integer.toString(game.getPlayerBankroll()));
+
+		//Style
+	   	playerBankDisplay.setOpaque(true);
+		playerBankDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
+	   	playerBankDisplay.setBackground(new Color(50, 204, 0));
+		playerBankDisplay.setForeground(Color.WHITE);
+		playerBankDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));
+
+	   	
+		//Positioning
+		playerBankDisplay.setHorizontalAlignment(JLabel.CENTER);
+		playerBankDisplay.setVerticalAlignment(JLabel.CENTER);
+
+	   	bankrollArea.add(playerBankDisplay, BorderLayout.SOUTH);
+
+	   	//bottom middle
+	   	JPanel playerArea = new JPanel(new BorderLayout());
+	   	playerArea.setOpaque(false);
+	   	playerArea.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+	   	c.gridx = 1;
+	   	c.gridy = 1;
+	   	c.gridwidth = 1;
+	   	c.weightx = 0.5;
+	   	c.weighty = 0.5;
+	   	add(playerArea, c);
+
+	   	//bottom right
+	   	JPanel optionArea = new JPanel(new GridLayout(3, 1));
+	   	optionArea.setOpaque(false);
+	   	optionArea.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 3));
+	   	c.gridx = 2;
+	   	c.gridy = 1;
+	   	c.gridwidth = 1;
+	   	c.weightx = 0.3;
+	   	c.weighty = 0.5;
 	   
+	   	add(optionArea, c);
+
 		//Buttons
+		optionArea.setOpaque(false);
 		JButton hitOption = new JButton("HIT");
+		hitOption.setFont(new Font("SansSerif", Font.BOLD, 20));
+		hitOption.setBackground(new Color(102, 204, 0));
+		hitOption.setForeground(Color.WHITE);
 	   	optionArea.add(hitOption, BorderLayout.NORTH);
 	   
 	   	JButton standOption = new JButton("STAND");
+		standOption.setFont(new Font("SansSerif", Font.BOLD, 20));
+		standOption.setBackground(new Color(0, 102, 204));
+		standOption.setForeground(Color.WHITE);
 	   	optionArea.add(standOption, BorderLayout.CENTER);
 	   
 	   	JButton doubleOption = new JButton("DOUBLE");
+		doubleOption.setFont(new Font("SansSerif", Font.BOLD, 20));
+		doubleOption.setBackground(new Color(204, 102, 0));
+		doubleOption.setForeground(Color.WHITE);
 	   	optionArea.add(doubleOption, BorderLayout.SOUTH);
-	   	add(optionArea, c);
 
-	   
-	   Stack<Card> test = new Stack<>();
-	   test.push(new Card(1, Card.Suit.Spades));
-	   test.push(new Card(12, Card.Suit.Hearts));
-	   test.push(new Card(5, Card.Suit.Clubs));
-	   test.push(new Card(10, Card.Suit.Diamonds));
-	   
-	   
-	   
-	   JLayeredPane pile = drawPile(test, 20);
-	   dealerArea.add(pile, BorderLayout.CENTER);
-	   
-	   
-	   /* 
-	   Stack<Card> deck = new Stack<>();
-	   for (Card.Suit suit : Card.Suit.values()){
-			for (int value = 1; value <= 13; value++){
-				Card card = new Card(value, suit);
-				card.hide();
-				deck.push(card);
-			}
-	   }
-
-	   JLayeredPane deckPane = drawPile(deck,1);
-	   deckArea.add(deckPane, BorderLayout.CENTER);
-	   */
-
-		//deckArea.revalidate();
-		//deckArea.repaint();
-
-		//Current Pot
-		JLabel pot = new JLabel(Integer.toString(game.getPotAmount()));
-		bankrollArea.add(pot);
-
-    	this.setVisible(true);
-		
+    	
+		this.setVisible(true);
     }
 
 	public JLayeredPane drawPile(Stack<Card> cardStack, int overlap){

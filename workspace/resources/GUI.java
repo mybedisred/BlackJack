@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Stack;
+import java.util.*;
 
 
 
@@ -81,6 +82,37 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   c.weighty = 0.5;
 	   add(bankrollArea, c);
 
+	    JLabel potDisplay = new JLabel(Integer.toString(game.getPotAmount()));
+
+		//Style
+	   	potDisplay.setOpaque(true);
+		potDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
+	   	potDisplay.setBackground(new Color(50, 204, 0));
+		potDisplay.setForeground(Color.WHITE);
+		potDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));
+
+	   	
+		//Positioning
+		potDisplay.setHorizontalAlignment(JLabel.CENTER);
+		potDisplay.setVerticalAlignment(JLabel.CENTER);
+
+	   	bankrollArea.add(potDisplay, BorderLayout.NORTH);
+
+	   	JLabel playerBankDisplay = new JLabel(Integer.toString(game.getPlayerBankroll()));
+
+		//Style
+	   	playerBankDisplay.setOpaque(true);
+		playerBankDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
+	   	playerBankDisplay.setBackground(new Color(50, 204, 0));
+		playerBankDisplay.setForeground(Color.WHITE);
+		playerBankDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));
+
+	   	
+		//Positioning
+		playerBankDisplay.setHorizontalAlignment(JLabel.CENTER);
+		playerBankDisplay.setVerticalAlignment(JLabel.CENTER);
+
+	   	bankrollArea.add(playerBankDisplay, BorderLayout.SOUTH);
 
 
 	   //bottom middle
@@ -128,27 +160,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   dealerArea.add(pile, BorderLayout.CENTER);
 	   
 	   
-	   /* 
-	   Stack<Card> deck = new Stack<>();
-	   for (Card.Suit suit : Card.Suit.values()){
-			for (int value = 1; value <= 13; value++){
-				Card card = new Card(value, suit);
-				card.hide();
-				deck.push(card);
-			}
-	   }
-
-	   JLayeredPane deckPane = drawPile(deck,1);
-	   deckArea.add(deckPane, BorderLayout.CENTER);
-	   */
-
-		//deckArea.revalidate();
-		//deckArea.repaint();
-
-		//Current Pot
-		JLabel pot = new JLabel(Integer.toString(game.getPotAmount()));
-		bankrollArea.add(pot);
-
+	   
     	this.setVisible(true);
 		
     }
@@ -168,6 +180,14 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 			pile.setOpaque(false);
 			return pile;
 	   }
+
+	public Stack<Card> listToStack(ArrayList<Card> list){
+		Stack<Card> result = new Stack<>();
+		for (Card card : list){
+			result.push(card);
+		}
+		return result;
+	}
 
 	   
 

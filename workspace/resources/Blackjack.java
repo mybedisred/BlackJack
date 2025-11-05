@@ -71,7 +71,7 @@ public class Blackjack {
 	   for (Card.Suit suit : Card.Suit.values()){
 			for (int value = 1; value <= 13; value++){
 				Card card = new Card(value, suit);
-				card.hide();
+				//card.hide();
 				deck.push(card);
 			}
 	   }

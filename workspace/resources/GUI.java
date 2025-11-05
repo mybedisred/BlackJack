@@ -17,6 +17,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Stack;
 
 
@@ -26,6 +27,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	Blackjack game;
    	public GUI(Blackjack game){
 		this.game = game;
+		game.newRound();
 
     	//Create and set up the window.
        	setTitle("Blackjack");
@@ -58,6 +60,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.weightx = 0.7;
 	   	c.weighty = 0.5;
 	   	add(dealerArea, c);
+
+		Stack<Card> dealerStack = listToStack(game.getDealerHand());
+		dealerArea.add(drawPile(dealerStack, 20));
 
 	   	//top right
 	   	JPanel deckArea = new JPanel(new BorderLayout());
@@ -126,6 +131,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.weighty = 0.5;
 	   	add(playerArea, c);
 
+		Stack<Card> playerStack = listToStack(game.getPlayerHand());
+		JLayeredPane pLayeredPane = drawPile(playerStack, 20);
+		playerArea.add(pLayeredPane, BorderLayout.CENTER);
+
 	   	//bottom right
 	   	JPanel optionArea = new JPanel(new GridLayout(3, 1));
 	   	optionArea.setOpaque(false);
@@ -178,7 +187,13 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 			return pile;
 	   }
 
-	   
+	private Stack<Card> listToStack(ArrayList<Card> list) {
+		Stack<Card> result = new Stack<Card>();
+		for (Card card : list){
+			result.push(card);
+		}
+		return result;
+	}
 
 
 	@Override

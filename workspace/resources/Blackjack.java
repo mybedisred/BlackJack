@@ -67,8 +67,8 @@ public class Blackjack {
 	 // Precondition: None
 	 // Postcondition: Returns a stack shuffled cards
 	public Stack<Card> makeShuffledDeck(){
-	Stack<Card> deck = new Stack<>();
-	   for (Card.Suit suit : Card.Suit.values()){
+		Stack<Card> deck = new Stack<>();
+	   	for (Card.Suit suit : Card.Suit.values()){
 			for (int value = 1; value <= 13; value++){
 				Card card = new Card(value, suit);
 				//card.hide();

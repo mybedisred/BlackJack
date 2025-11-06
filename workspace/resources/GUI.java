@@ -5,7 +5,6 @@
  */
 package resources;
 import javax.imageio.ImageIO;
-import javax.print.attribute.AttributeSetUtilities;
 import javax.swing.*;
 
 import java.awt.*;
@@ -24,12 +23,24 @@ import java.util.Stack;
 
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
 
-	Blackjack game;
+	private Blackjack game;
+
+	private JButton hitOption;
+	private JButton standOption;
+	private JButton doubleOption;
+	
+	private JLabel playerBankDisplay;
+	private JLabel potDisplay;
+
+	private JPanel dealerArea;
+	private JPanel deckArea;
+	private JPanel playerArea;
+
    	public GUI(Blackjack game){
 		this.game = game;
-		game.newRound();
-
-    	//Create and set up the window.
+		game.newRound(); //Starts a round of BlackJack
+		
+		//Create and set up the window.
        	setTitle("Blackjack");
        	setSize(900,580);
        	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,7 +62,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	setLayout(layout);
 
 	   	//top left
-	   	JPanel dealerArea = new JPanel(new BorderLayout());
+	   	dealerArea = new JPanel(new BorderLayout());
 	   	dealerArea.setOpaque(false);
 	   	dealerArea.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
 	   	c.gridx = 0;
@@ -61,11 +72,11 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.weighty = 0.5;
 	   	add(dealerArea, c);
 
-		Stack<Card> dealerStack = listToStack(game.getDealerHand());
-		dealerArea.add(drawPile(dealerStack, 20));
+		//ADD TO UPDATE
+		dealerArea.add( drawPile( listToStack(game.getDealerHand()), 20 ) );
 
 	   	//top right
-	   	JPanel deckArea = new JPanel(new BorderLayout());
+	   	deckArea = new JPanel(new BorderLayout());
 	   	deckArea.setOpaque(false);
 	   	deckArea.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
 	   	c.gridx = 2;
@@ -88,9 +99,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.weighty = 0.5;
 	   	add(bankrollArea, c);
 
-	   	JLabel potDisplay = new JLabel(Integer.toString(game.getPotAmount()));
+		
+	   	potDisplay = new JLabel(Integer.toString(game.getPotAmount())); //ADD TO UPDATE
 
-		//Style
+		//Style (ADD TO UPDATE)
 	   	potDisplay.setOpaque(true);
 		potDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,30));
 	   	potDisplay.setBackground(new Color(50, 204, 0));
@@ -104,7 +116,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	   	bankrollArea.add(potDisplay, BorderLayout.NORTH);
 
-	   	JLabel playerBankDisplay = new JLabel(Integer.toString(game.getPlayerBankroll()));
+	   	playerBankDisplay = new JLabel(Integer.toString(game.getPlayerBankroll())); //ADD TO UPDATE
 
 		//Style
 	   	playerBankDisplay.setOpaque(true);
@@ -121,7 +133,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	bankrollArea.add(playerBankDisplay, BorderLayout.SOUTH);
 
 	   	//bottom middle
-	   	JPanel playerArea = new JPanel(new BorderLayout());
+	   	playerArea = new JPanel(new BorderLayout());
 	   	playerArea.setOpaque(false);
 	   	playerArea.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
 	   	c.gridx = 1;
@@ -129,11 +141,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.gridwidth = 1;
 	   	c.weightx = 0.5;
 	   	c.weighty = 0.5;
-	   	add(playerArea, c);
+	   	this.add(playerArea, c);
 
-		Stack<Card> playerStack = listToStack(game.getPlayerHand());
-		JLayeredPane pLayeredPane = drawPile(playerStack, 20);
-		playerArea.add(pLayeredPane, BorderLayout.CENTER);
+		playerArea.add( drawPile( listToStack(game.getPlayerHand()), 20 ) );
 
 	   	//bottom right
 	   	JPanel optionArea = new JPanel(new GridLayout(3, 1));
@@ -144,32 +154,57 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.gridwidth = 1;
 	   	c.weightx = 0.3;
 	   	c.weighty = 0.5;
-	   
 	   	add(optionArea, c);
 
 		//Buttons
-		optionArea.setOpaque(false);
-		JButton hitOption = new JButton("HIT");
+		hitOption = new JButton("HIT");
 		hitOption.setFont(new Font("SansSerif", Font.BOLD, 20));
-		hitOption.setBackground(new Color(102, 204, 0));
+		hitOption.setBackground(new Color(102, 204, 0, 80));
 		hitOption.setForeground(Color.WHITE);
+		hitOption.addMouseListener(this);
 	   	optionArea.add(hitOption, BorderLayout.NORTH);
 	   
-	   	JButton standOption = new JButton("STAND");
+	   	standOption = new JButton("STAND");
 		standOption.setFont(new Font("SansSerif", Font.BOLD, 20));
-		standOption.setBackground(new Color(0, 102, 204));
+		standOption.setBackground(new Color(0, 102, 204, 80));
 		standOption.setForeground(Color.WHITE);
+		standOption.addMouseListener(this);
 	   	optionArea.add(standOption, BorderLayout.CENTER);
 	   
-	   	JButton doubleOption = new JButton("DOUBLE");
+	   	doubleOption = new JButton("DOUBLE");
 		doubleOption.setFont(new Font("SansSerif", Font.BOLD, 20));
-		doubleOption.setBackground(new Color(204, 102, 0));
+		doubleOption.setBackground(new Color(204, 102, 0, 80));
 		doubleOption.setForeground(Color.WHITE);
+		doubleOption.addMouseListener(this);
 	   	optionArea.add(doubleOption, BorderLayout.SOUTH);
 
     	
 		this.setVisible(true);
     }
+
+	private void update() {
+		//Update Player's Hand
+		playerArea.removeAll();
+		playerArea.add( drawPile( listToStack(game.getPlayerHand()), 20 ) );
+
+		//Update Dealer's Hand
+		dealerArea.removeAll();
+		dealerArea.add( drawPile( listToStack(game.getDealerHand()), 20 ) );
+
+		//Pot Amount Label Display
+		potDisplay.setText(Integer.toString(game.getPotAmount()));
+
+		//Player Bankroll Label Display
+		playerBankDisplay.setText(Integer.toString(game.getPlayerBankroll()));
+
+		//Update Button Opacity
+		hitOption.setBackground(new Color(102, 204, 0, 80));
+		standOption.setBackground(new Color(0, 102, 204,80));
+		doubleOption.setBackground(new Color(204, 102, 0, 80));
+
+		this.revalidate();
+		this.repaint();
+	}
 
 	public JLayeredPane drawPile(Stack<Card> cardStack, int overlap){
 			Object[] cards = cardStack.toArray();
@@ -196,6 +231,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	}
 
 
+
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		//TODO Auto-generated method stub
@@ -217,18 +253,35 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		if (arg0.getSource() instanceof JButton) {
+			update();
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+
+		if (arg0.getSource() instanceof JButton){
+			JButton thisButton = (JButton)(arg0.getSource());
+			if (thisButton == hitOption) {
+				game.playerHit();
+				System.out.println("Player picked HIT");
+			}
+			else if (thisButton == standOption) {
+				game.playerStand();
+				System.out.println("Player picked STAND");
+			}
+			else if (thisButton == doubleOption) {
+				game.playerDouble();
+				System.out.println("Player picked DOUBLE");
+			}
+		}
+
+		update();
 		
 	}
 

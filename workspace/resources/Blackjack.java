@@ -6,8 +6,7 @@ import java.util.Collections;
 
 public class Blackjack {
 	//variables
-	private boolean playerAction;
-	private boolean dealerAction;
+	private boolean isPlayerTurn;
 	private int playerBankroll = 500; 
 	private int potAmount = 0;
 	private static int fixedBet = 20;
@@ -52,8 +51,7 @@ public class Blackjack {
 		dealerHand = new ArrayList<>();
 		potAmount = fixedBet * 2;
 		playerBankroll -= fixedBet;
-		playerAction = true;
-		dealerAction = false;
+		isPlayerTurn = true;
 
 		//deal the cards
 		playerHand.add(deck.pop());
@@ -104,42 +102,39 @@ public class Blackjack {
 		return total;
 	}
 
-	//pre condition: playerAction is true
+	//pre condition: isPlayerTurn is true
 	//post condition: gives player another card
 	public void playerHit(){
-		if (playerAction){
+		if (isPlayerTurn){
 			playerHand.add(deck.pop());
 		}
 	}
 
-	//pre condition: playerAction is true
+	//pre condition: isPlayerTurn is true
 	//finishes player's turn and makes it calls method to perform dealer action 
 	public void playerStand(){
-		if (!playerAction){
-			return; 
+		if (isPlayerTurn){
+			isPlayerTurn = false;
+			dealerPlay();
 		}
-		playerAction = false;
-		dealerPlay();
 	}
 
-	//pre condition: playerAction is true and player can afford double
+	//pre condition: isPlayerTurn is true and player can afford double
 	//post condition: doubles the player bet and gives the player exactly one more card
 	public void playerDouble(){
-		if (!playerAction || playerBankroll < fixedBet){
-			return;
+		if ((isPlayerTurn) && (playerBankroll > fixedBet)){
+			playerBankroll -= fixedBet;
+			potAmount += fixedBet * 2;
+			playerHand.add(deck.pop());
+			isPlayerTurn = false;
+			dealerPlay();
 		}
-		playerBankroll -= fixedBet;
-		potAmount += fixedBet * 2;
-		playerHand.add(deck.pop());
-		playerAction = false;
-		dealerPlay();
 	} 
 
-	//pre condition: dealerAction = true
+	//pre condition: isPlayerTurn == false
 	//post condition: gives dealer more cards until 17-21 or bust
 	public void dealerPlay(){
 		dealerHand.get(0).show();
-		dealerAction = false;
 		while (calculateHandValue(dealerHand) < 17){
 			dealerHand.add(deck.pop());
 		}
@@ -150,25 +145,33 @@ public class Blackjack {
 	public String calculateWinner(){
 		int playerValue = calculateHandValue(playerHand);
 		int dealerValue = calculateHandValue(dealerHand);
+		
 
 		if (playerValue > 21){
+			isPlayerTurn = false;
 			return "Player Busts. Dealer Wins!";
 		}
-		if (dealerValue > 21){
-			playerBankroll += potAmount;
-			return "Dealer Busts. Player Wins!";
+		else if (!isPlayerTurn) {
+			if (dealerValue > 21){
+				playerBankroll += potAmount;
+				return "Dealer Busts. Player Wins!";
+			}
+			else if (playerValue > dealerValue){
+				playerBankroll += potAmount;
+				return "Player Wins!";
+			}
+			else if (playerValue < dealerValue){
+				return "Dealer Wins!";
+			}
+			else {
+				//if none of those then tie
+				playerBankroll += fixedBet;
+				return "Push!";
+			}
 		}
-		if (playerValue > dealerValue){
-			playerBankroll += potAmount;
-			return "Player Wins!";
+		else {
+			return null;
 		}
-		if (playerValue < dealerValue){
-			return "Dealer Wins!";
-		}
-		
-		//if none of those then tie
-		playerBankroll  += fixedBet;
-		return "Push!";
 	}
 }
 

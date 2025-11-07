@@ -96,7 +96,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.gridy = 1;
 	   	c.gridwidth = 1;
 	   	c.weightx = 0.2;
-	   	c.weighty = 0.5;
+	   	c.weighty = 0.25;
 	   	add(bankrollArea, c);
 
 		
@@ -235,7 +235,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		//TODO Auto-generated method stub
-		
 	}
 
 	@Override

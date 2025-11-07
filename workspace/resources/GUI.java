@@ -139,8 +139,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.gridx = 1;
 	   	c.gridy = 1;
 	   	c.gridwidth = 1;
-	   	c.weightx = 0.75;
-	   	c.weighty = 0.25;
+	   	c.weightx = 0.5;
+	   	c.weighty = 0.5;
 	   	this.add(playerArea, c);
 
 		playerArea.add( drawPile( listToStack(game.getPlayerHand()), 20 ) );
@@ -153,7 +153,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	c.gridy = 1;
 	   	c.gridwidth = 1;
 	   	c.weightx = 0.3;
-	   	c.weighty = 0.25;
+	   	c.weighty = 0.5;
 	   	add(optionArea, c);
 
 		//Buttons
@@ -183,10 +183,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     }
 
 	private void update() {
-		//See if player lost
-		if (game.calculateWinner() != null)
-			System.out.println(game.calculateWinner());
-
 		//Update Player's Hand
 		playerArea.removeAll();
 		playerArea.add( drawPile( listToStack(game.getPlayerHand()), 20 ) );
@@ -201,22 +197,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		//Player Bankroll Label Display
 		playerBankDisplay.setText(Integer.toString(game.getPlayerBankroll()));
 
-		updateButtonOpacity();
-
-		System.out.println("Player's Hand's value is: " + game.calculateHandValue(game.getPlayerHand()));
-		System.out.println("Dealer's Hand's value is: " + game.calculateHandValue(game.getDealerHand()));
+		//Update Button Opacity
+		hitOption.setBackground(new Color(102, 204, 0, 80));
+		standOption.setBackground(new Color(0, 102, 204,80));
+		doubleOption.setBackground(new Color(204, 102, 0, 80));
 
 		this.revalidate();
-		this.repaint();
-	}
-
-	//Precondition: hitOption, standOption, and doubleOption have all been initialized
-	//Postcondition: Resets hitOption, standOption, and doubleOption buttons background so the opacity stays the same
-	private void updateButtonOpacity() {
-		//Update Button Opacity
-		hitOption.setBackground(new Color(102, 184, 0, 80));
-		standOption.setBackground(new Color(0, 102, 204, 80));
-		doubleOption.setBackground(new Color(204, 102, 0, 80));
 		this.repaint();
 	}
 
@@ -236,8 +222,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 			return pile;
 	   }
 
-	//Precondition: None
-	//PostCondition: Converts ArrayList of Cards to a stack of cards
 	private Stack<Card> listToStack(ArrayList<Card> list) {
 		Stack<Card> result = new Stack<Card>();
 		for (Card card : list){
@@ -267,25 +251,22 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		if (arg0.getSource() instanceof JButton) {
-			updateButtonOpacity();
-		}
+		// TODO Auto-generated method stub
 	}
 	
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		if (arg0.getSource() instanceof JButton) {
-			updateButtonOpacity();
+			update();
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 
-		if (arg0.getSource() instanceof JButton){ //Checks if button was pressed
+		if (arg0.getSource() instanceof JButton){
 			JButton thisButton = (JButton)(arg0.getSource());
-			//Checks which button was pressed
-			if (thisButton == hitOption) { 
+			if (thisButton == hitOption) {
 				game.playerHit();
 				System.out.println("Player picked HIT");
 			}
@@ -299,7 +280,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 			}
 		}
 
-		update(); //Updates screen after clicking on anything with a mouselistener
+		update();
 		
 	}
 

@@ -103,11 +103,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 	   	add(bankrollArea, c);
 
 		
+
 	   	potDisplay = new JLabel("Pot: $" + Integer.toString(game.getPotAmount())); //ADD TO UPDATE
 
-		//Style (ADD TO UPDATE)
-	   	potDisplay.setOpaque(true);
-		potDisplay.setFont(new Font(Font.DIALOG, Font.BOLD,20));
+	   	potDisplay = new JLabel(Integer.toString(game.getPotAmount())); //ADD TO UPDATE
 	   	potDisplay.setBackground(new Color(50, 204, 0));
 		potDisplay.setForeground(Color.WHITE);
 		potDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 6));

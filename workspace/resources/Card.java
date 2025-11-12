@@ -64,10 +64,10 @@ public class Card extends JPanel{
 		 */
 		public static int valueInt(String value) {
 			
-			if(value.equals("J")) return 11;
-			if(value.equals("Q")) return 12;
-			if(value.equals("K")) return 13;
-			if(value.equals("A")) return 1;
+			if(value.equals("j")) return 11;
+			if(value.equals("q")) return 12;
+			if(value.equals("k")) return 13;
+			if(value.equals("a")) return 1;
 			
 			return Integer.parseInt(value);
 		}
@@ -139,4 +139,6 @@ public class Card extends JPanel{
 			g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), null);
 		}
 	
+
 }
+

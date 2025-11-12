@@ -84,7 +84,7 @@ public class Blackjack {
 	   	for (Card.Suit suit : Card.Suit.values()){
 			for (int value = 1; value <= 13; value++){
 				Card card = new Card(value, suit);
-				card.hide();
+				//card.hide();
 				deck.push(card);
 			}
 	   }
@@ -159,7 +159,6 @@ public class Blackjack {
 	//post condition: gives dealer more cards until 17-21 or bust
 	public void dealerPlay(){
 		dealerHand.get(0).show();
-
 		while (calculateHandValue(dealerHand) < 17){
 			/*try {
 				Thread.sleep(500);

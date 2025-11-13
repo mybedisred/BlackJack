@@ -12,9 +12,10 @@ public class Blackjack {
 	private int playerBankroll = 500; 
 	private int potAmount = 0;
 	private static int fixedBet = 20;
-	private ArrayList<Card> playerHand;
+	private <ArrayList<Card> playerHand;
 	private ArrayList<Card> dealerHand;
 	private Stack<Card> deck; 
+	private int numPlayerHands
 
 	//constructor
 	public Blackjack(){
@@ -84,7 +85,7 @@ public class Blackjack {
 	   	for (Card.Suit suit : Card.Suit.values()){
 			for (int value = 1; value <= 13; value++){
 				Card card = new Card(value, suit);
-				//card.hide();
+				card.hide();
 				deck.push(card);
 			}
 	   }
@@ -134,9 +135,13 @@ public class Blackjack {
 	//pre condition: isPlayerTurn is true
 	//finishes player's turn and makes it calls method to perform dealer action 
 	public void playerStand(){
-		if (isPlayerTurn){
+		ArrayList<Card> currentHand = playerHands.get(currentHandIndex); 
+		if (isPlayerTurn && numPlayerHands == 0){
 			isPlayerTurn = false;
 			dealerPlay();
+		}
+		else if (isPlayerTurn) {
+		
 		}
 	}
 
@@ -172,7 +177,26 @@ public class Blackjack {
 			dealerHand.add(dealerCard);
 			
 		}
-	}	
+	}
+	
+	public boolean canSplit(ArrayList<Card> hand){
+		int firstValue = hand.get(0).value;
+		int secondValue = hand.get(1).value;
+		if (firstValue == secondValue && hand.size() == 2){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	//precondition: canSplit returns true 
+	public void playerSplit(){
+		ArrayList<Card> secondHand = new ArrayList<Card>();
+		Card splitCard = playerHand.get(1);
+		playerHand.remove(1);
+		secondHand.add(splitCard); 
+	}
 		
 	
 
